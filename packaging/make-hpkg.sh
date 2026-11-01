@@ -9,12 +9,14 @@ set -e
 HERE=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$HERE/.." && pwd)
 VERSION=1.9.23
-REVISION=7
+REVISION=8
 STAGE="$HERE/stage"
 
 # Build prerequisites (idempotent). A minimal Haiku lacks mpc/mpfr (compiler) and
-# the base develop headers.
-pkgman install -y gcc make pkgconfig mpc mpfr haiku_devel || true
+# the base develop headers. libsamplerate and opus are optional to waf, which
+# silently leaves out libjacknet and netadapter without them, but the package
+# ships both and declares them in jack.PackageInfo.
+pkgman install -y gcc make pkgconfig mpc mpfr haiku_devel libsamplerate_devel opus_devel || true
 
 # Always build from scratch. waf builds incrementally, so without this the
 # package would be assembled from whatever happens to be in build/ -- which is

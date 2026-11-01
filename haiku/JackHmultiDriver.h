@@ -94,7 +94,7 @@ private:
     int32 fRequestedBuffers;
 
     // True if Open() shut the media services down to take the device; Close()
-    // then relaunches them (see OpenDevice/RestoreMediaServer).
+    // then restarts them so they pick it up again (see RestoreMediaServer).
     bool fMediaServerStopped;
 
     int OpenDevice(const char* device);

@@ -237,14 +237,41 @@ fail:
     return -1;
 }
 
-// Relaunch the media services if this driver stopped them in OpenDevice, so a
-// failed or closed session leaves the system's audio exactly as it found it.
+// Give the device back to the media services if this driver took it from them
+// in OpenDevice, so a failed or closed session leaves the system's audio as it
+// found it. Must be called after fDevice is closed.
+//
+// launch_daemon runs media_server as a service and relaunches it as soon as it
+// quits, so the media services are normally already back, started while this
+// driver held the device. The multi_audio add-on skips a device it cannot open
+// and only looks again when a device node is added or removed, so that copy of
+// the media services never sees the device. Restart them now that it is free,
+// the way the Media preferences do: shut them down and let launch_daemon start
+// them again.
 void JackHmultiDriver::RestoreMediaServer()
 {
-    if (fMediaServerStopped) {
-        jack_info("JackHmultiDriver: restarting media services");
-        launch_media_server(B_INFINITE_TIMEOUT, media_progress_noop, NULL);
-        fMediaServerStopped = false;
+    if (!fMediaServerStopped) {
+        return;
+    }
+    fMediaServerStopped = false;
+
+    jack_info("JackHmultiDriver: restarting media services to hand the device back");
+    if (BMediaRoster::IsRunning() && shutdown_media_server(B_INFINITE_TIMEOUT, media_progress_noop, NULL) != B_OK) {
+        jack_error("JackHmultiDriver: could not stop the media services; restart them from the Media preferences");
+        return;
+    }
+
+    // Wait for launch_daemon to bring both servers back. launch_media_server()
+    // must not run while that is in progress: it treats a media_server without
+    // its add-on server as crashed and kills it.
+    for (int i = 0; i < 100 && !BMediaRoster::IsRunning(); i++) {
+        snooze(100000);
+    }
+    if (!BMediaRoster::IsRunning()) {
+        status_t err = launch_media_server(B_INFINITE_TIMEOUT, media_progress_noop, NULL);
+        if (err != B_OK && err != B_ALREADY_RUNNING) {
+            jack_error("JackHmultiDriver: could not start the media services: %s", strerror(err));
+        }
     }
 }
 

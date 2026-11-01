@@ -31,8 +31,10 @@ namespace Jack
 // Storage bounds for the driver-owned copies of the multi_audio structures.
 // The driver reports its own counts; we only need arrays at least that large
 // and validate the returned counts against these before indexing (Rule: every
-// driver-supplied size is bounds-checked before use).
-#define HMULTI_MAX_CHANNELS 32
+// driver-supplied size is bounds-checked before use). 128 channels (outputs plus
+// inputs) matches the multi_audio media add-on: 64 each way, the per-stream limit
+// of FreeBSD's uaudio(4).
+#define HMULTI_MAX_CHANNELS 128
 #define HMULTI_MAX_BUFFERS 8
 
 /*!

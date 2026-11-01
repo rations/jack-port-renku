@@ -442,14 +442,17 @@ int JackHmultiDriver::Open(jack_nframes_t buffer_size,
 
     // Enable every channel we will use and lock to the internal clock.
     {
+        // One bit per output and input channel; their sum was checked against
+        // HMULTI_MAX_CHANNELS above.
         multi_channel_enable enable;
-        uint32 enableBits = 0;
+        uchar enableBits[(HMULTI_MAX_CHANNELS + 7) / 8];
+        memset(enableBits, 0, sizeof(enableBits));
         memset(&enable, 0, sizeof(enable));
         enable.info_size = sizeof(enable);
-        enable.enable_bits = (uchar*)&enableBits;
+        enable.enable_bits = enableBits;
         int channelCount = fDescription.output_channel_count + fDescription.input_channel_count;
         for (int i = 0; i < channelCount; i++) {
-            B_SET_CHANNEL(&enableBits, i, true);
+            B_SET_CHANNEL(enableBits, i, true);
         }
         enable.lock_source = B_MULTI_LOCK_INTERNAL;
         if (ioctl(fDevice, B_MULTI_SET_ENABLED_CHANNELS, &enable, sizeof(enable)) != 0) {

@@ -1,12 +1,12 @@
 name			jack
-version			1.9.23-8
+version			1.9.23-9
 architecture	x86_64
-summary			"JACK2 low-latency audio server (native Haiku port)"
-description		"A native Haiku port of JACK2 (jackd2), the low-latency audio server,
+summary			"JACK2 low-latency audio server (RenkuOS)"
+description		"A native RenkuOS port of JACK2 (jackd2), the low-latency audio server,
 with a Media Kit based backend. Includes the jackd server, libjack/libjackserver,
 the dummy/haiku/hmulti audio backends and the haikumidi MIDI slave, and the standard
-JACK example tools. This is the audio backend used by the JackDAW DAW and the rest of
-the JACK-on-Haiku stack."
+JACK example tools. Kasen and the rest of the RenkuOS audio stack can run
+on it."
 packager		"rations <ehqcar@proton.me>"
 vendor			"rations"
 copyrights {
@@ -29,5 +29,5 @@ requires {
 	lib:libsamplerate
 }
 urls {
-	"https://github.com/rations/jack-port-haiku"
+	"https://github.com/rations/jack-port-renku"
 }

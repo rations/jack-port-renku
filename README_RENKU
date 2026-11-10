@@ -1,12 +1,12 @@
 JACK2 on RenkuOS
 ================
 
-This repository is the source of the jack package, part of the JackDAW stack for
-RenkuOS: https://github.com/rations/jackDAW-renku. The 0.5 release's install.sh is for
-Haiku hrev60256; there is no RenkuOS release yet.
+This repository is the source of the jack package for RenkuOS. Built packages are on
+its Releases page (https://github.com/rations/jack-port-renku/releases), and
+https://github.com/rations/renku-audio lists the whole audio stack.
 
 
-This is a native port of JACK2 (jackd2), the low-latency audio server, to RenkuOS (a Haiku fork),
+This is a native port of JACK2 (jackd2), the low-latency audio server, to RenkuOS,
 including a new Media Kit based audio backend. It is a real port of the JACK
 engine (graph, transport, multi-client, libjack) running on RenkuOS, not an
 API-emulation shim.
@@ -15,9 +15,8 @@ API-emulation shim.
 Status
 ------
 
-Developed on Haiku (R1/beta5 and nightlies, x86_64) and tested there both in a
-QEMU/KVM VM and on bare-metal hardware. On RenkuOS build 66 (2026-10-30) the
-jack 1.9.23-7 package runs JackDAW and Jack Graph on bare metal. On Haiku:
+Tested in a QEMU/KVM VM and on bare-metal hardware (x86_64). On RenkuOS build 66
+(2026-10-30) the jack package runs Kasen and Jack Graph on bare metal:
 
 - The portable engine, libjack/libjackserver, and the POSIX IPC layer
   (threads, semaphores, shared memory, sockets, FIFOs) build and run.
@@ -101,11 +100,10 @@ Known limitations
 -----------------
 
 - USB Audio Class 2.0 interfaces: RenkuOS's usb_audio driver supports them (it
-  carries the Media-OS UAC2 driver, which includes the rations/haiku-kernel-usb
-  work), so class-compliant UAC2 interfaces are published as hmulti devices and
+  carries the Media-OS UAC2 driver), so class-compliant UAC2 interfaces are published as hmulti devices and
   JACK can use them. Playback on an XMOS-based NUX USB Audio 2.0 (20b1:2018) is
   confirmed on RenkuOS; the Behringer UMC204HD (1397:0508) has not been tested
-  on RenkuOS yet. On Haiku the JackDAW 0.5 system package adds the UAC2 driver.
+  on RenkuOS yet.
 
 - Measuring round-trip latency with jack_iodelay requires a working analog
   loopback (an output physically wired back to an input). On the built-in HDA
@@ -124,10 +122,7 @@ Two ways to install, both native on RenkuOS (x86_64):
   /boot/system/non-packaged (the manual Building steps above, wrapped with the
   pkgman prerequisites).
 
-A HaikuPorts recipe is in `packaging/jack-1.9.23.recipe` (validate with
-`haikuporter -c jack` before use).
-
-This is the base of the JackDAW audio stack: everything else in it is a JACK client.
+This is the base of the Kasen audio stack: everything else in it is a JACK client.
 On RenkuOS the USB audio driver is part of the system.
 
 Roadmap
@@ -136,4 +131,3 @@ Roadmap
 - MIDI via the MIDI Kit.
 - Transport start/stop/reposition tests.
 - Robustness pass and the upstream JACK test suite on RenkuOS.
-- HaikuPorts recipe and submission upstream (recipe drafted in packaging/).

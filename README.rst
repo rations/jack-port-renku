@@ -2,9 +2,9 @@
 ################################
 
 .. note::
-   This repository is the source of the ``jack`` package, part of the
-   `JackDAW stack <https://github.com/rations/jackDAW-renku>`_ for RenkuOS. See ``README_RENKU``.
-   The 0.5 release's ``install.sh`` is for Haiku hrev60256; there is no RenkuOS release yet.
+   This repository is the source of the ``jack`` package for RenkuOS. See ``README_RENKU``.
+   Built packages are on its `Releases <https://github.com/rations/jack-port-renku/releases>`_
+   page, and `renku-audio <https://github.com/rations/renku-audio>`_ lists the whole audio stack.
 
 
 .. image:: https://travis-ci.org/jackaudio/jack2.svg?branch=master
